@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppHub - 应用分发平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 8px;
+            color: #007aff;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #007aff;
+        }
+        
+        /* 应用详情区域 */
+        .app-detail {
+            display: flex;
+            margin: 40px 0;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-icon-section {
+            flex: 0 0 300px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+        }
+        
+        .app-icon {
+            width: 180px;
+            height: 180px;
+            border-radius: 35px;
+            object-fit: cover;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 25px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .app-info-section {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .app-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .app-developer {
+            color: #007aff;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .app-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .app-rating {
+            color: #ff9500;
+            font-weight: 500;
+            margin-right: 20px;
+            font-size: 18px;
+        }
+        
+        .app-category {
+            background: #f2f2f7;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .app-description {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #444;
+            font-size: 16px;
+        }
+        
+        .app-features {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .app-features h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .app-features ul {
+            list-style-position: inside;
+            columns: 2;
+        }
+        
+        .app-features li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        /* 下载选项 */
+        .download-options {
+            margin-top: 30px;
+        }
+        
+        .download-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .option-card {
+            background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+            border-radius: 15px;
+            padding: 25px;
+            flex: 1;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #007aff;
+        }
+        
+        .option-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .option-desc {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: #006ee0;
+            transform: scale(1.05);
+        }
+        
+        .btn-cloud {
+            background: #34c759;
+        }
+        
+        .btn-cloud:hover {
+            background: #2daa4c;
+        }
+        
+        /* 底部区域 */
+        footer {
+            background: #1d1d1f;
+            color: #888;
+            padding: 30px 0 15px;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .app-detail {
+                flex-direction: column;
+            }
+            
+            .app-icon-section {
+                flex: none;
+                padding: 30px 20px;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .app-features ul {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>AppHub</span>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">应用</a></li>
+                    <li><a href="#">游戏</a></li>
+                    <li><a href="#">支持</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 应用详情 -->
+    <main class="container">
+        <div class="app-detail">
+            <div class="app-icon-section">
+                <img src="https://images.unsplash.com/photo-1634942536746-46b9a6de9231?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="App Icon" class="app-icon">
+                <div class="app-meta">
+                    <div class="app-rating">★★★★☆ 4.5</div>
+                    <div class="app-category">照片与视频</div>
+                </div>
+                <p style="color: white; margin-top: 10px;">版本: 3.2.1 | 大小: 158 MB</p>
+            </div>
+            
+            <div class="app-info-section">
+                <h1 class="app-title">Photo Editor Pro</h1>
+                <p class="app-developer">由 Creative Studio 提供</p>
+                
+                <p class="app-description">
+                    Photo Editor Pro 是一款功能强大的照片编辑应用程序，提供专业的编辑工具和令人惊叹的滤镜效果。无论您是摄影爱好者还是普通用户，都能轻松编辑出令人满意的照片。
+                </p>
+                
+                <div class="app-features">
+                    <h3>主要功能</h3>
+                    <ul>
+                        <li>高级色彩校正工具</li>
+                        <li>100+ 专业滤镜和效果</li>
+                        <li>人像美化与背景虚化</li>
+                        <li>RAW 格式支持</li>
+                        <li>无损编辑和高质量导出</li>
+                        <li>批量处理功能</li>
+                    </ul>
+                </div>
+                
+                <div class="download-options">
+                    <h2 class="download-title">下载选项</h2>
+                    <div class="options">
+                        <div class="option-card">
+                            <i class="fas fa-download option-icon"></i>
+                            <h3 class="option-title">直接下载</h3>
+                            <p class="option-desc">高速下载，无需等待</p>
+                            <a href="https://example.com/direct-download" class="btn">立即下载</a>
+                        </div>
+            
