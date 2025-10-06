@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的音乐库</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #search { width: 100%; padding: 10px; margin-bottom: 20px; }
+        .song-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .song-item:hover { background-color: #f5f5f5; }
+        #audioPlayer { width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>我的音乐库</h1>
+    <input type="text" id="search" placeholder="搜索歌曲...">
+    <div id="songList"></div>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        // 你的音乐数据：歌曲名和对应的直链
+        const musicList = [
+            { name: "歌曲一", url: "https://raw.githubusercontent.com/你的用户名/你的仓库名/分支名/music/song1.mp3" },
+            { name: "歌曲二", url: "https://raw.githubusercontent.com/你的用户名/你的仓库名/分支名/music/song2.mp3" },
+            // ... 添加更多歌曲
+        ];
+
+        const songListElement = document.getElementById('songList');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const searchInput = document.getElementById('search');
+
+        // 初始化显示所有歌曲
+        displaySongs(musicList);
+
+        // 搜索功能
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSongs = musicList.filter(song => 
+                song.name.toLowerCase().includes(searchTerm)
+            );
+            displaySongs(filteredSongs);
+        });
+
+        function displaySongs(songs) {
+            songListElement.innerHTML = '';
+            songs.forEach(song => {
+                const songElement = document.createElement('div');
+                songElement.className = 'song-item';
+                songElement.textContent = song.name;
+                songElement.addEventListener('click', () => {
+                    audioPlayer.src = song.url;
+                    audioPlayer.play();
+                });
+                songListElement.appendChild(songElement);
+            });
+        }
+    </script>
+</body>
+      </html>
